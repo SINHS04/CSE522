@@ -38,7 +38,7 @@ best_cf = init_cf
 err = 1000000000    # 초기 에러값
 eps = 100   # 탐색 범위
 eps2 = 1.1
-trial = 160 # 시도횟수
+trial = 150 # 시도횟수
 
 for i in range(trial):
     c_t = np.array(best_cf.copy()) - eps
@@ -46,7 +46,7 @@ for i in range(trial):
 
     for j in range(1, 5):
         # eps를 줄여가며 best_cf 각 요소 +- eps 범위를 eps / 20 만큼 증가시키며 탐색
-        for c in np.arange(0, eps * 2, eps / 20):
+        for c in np.arange(0, eps * 2, eps / 10):
             cf = best_cf.copy()
             cf[j] = c_t[j] + c
             tmp = mse(test)
@@ -55,7 +55,7 @@ for i in range(trial):
                 err = tmp
 
     # c0는 따로 실행 -> c1, c2, c3, c4와 범위가 다르기 때문에
-    for c in np.arange(0, (eps/1000) * 2, eps / 100000):
+    for c in np.arange(0, (eps/1000) * 2, eps / 10000):
         cf = best_cf.copy()
         cf[0] = c_t[0] + c
         tmp = mse(test)
@@ -81,5 +81,8 @@ else:
 ##################
 # second attempt #
 
+# f(x) = a(sin(bx) + sin(cx) + sin(dx) + sin(ex))
+# ∂f∂a=sin(ex)+sin(dx)+sin(cx)+sin(bx)
+# ∂f∂b=axcos(bx)
 
 ##################

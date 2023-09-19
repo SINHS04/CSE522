@@ -78,11 +78,62 @@ else:
     print("fail the test")
 ##################
 
-##################
-# second attempt #
+# 여기서부터 코드를 작성하시오
 
-# f(x) = a(sin(bx) + sin(cx) + sin(dx) + sin(ex))
-# ∂f∂a=sin(ex)+sin(dx)+sin(cx)+sin(bx)
-# ∂f∂b=axcos(bx)
+# init_cf = [max(data) / 4, 800, 1000, 1200, 1400]
+init_cf = [max(data) / 4 + 0.02, 820, 1030, 1230, 1460]
+# init_cf = [1, 1, 1, 1, 1]
+
+##################
+# second attempt
+
+best_cf = init_cf
+
+time = np.linspace(0, 0.5, len(data))
+# data
+
+
+
+def derivative_1():
+    return np.mean(np.sin(np.array([c * time for c in best_cf[1:]])) * np.sign(loss())) * 1500
+
+
+def derivative_2(c):
+    return np.mean(best_cf[0] * time * np.cos(c * time) * np.sign(loss())) * 1500
+
+
+def loss():
+    return np.sum(best_cf[0] * np.sin(np.array( [i * time for i in cf[1:]] )), axis=0) - data
+
+
+attempt = 100000
+err = 0.05
+learning_rate = [0.000001, 0.001]
+
+for i in range(attempt):
+    cf = [
+        best_cf[0] - learning_rate[0] * derivative_1(),
+        # best_cf[0],
+        best_cf[1] - learning_rate[1] * derivative_2(best_cf[1]),
+        best_cf[2] - learning_rate[1] * derivative_2(best_cf[2]),
+        best_cf[3] - learning_rate[1] * derivative_2(best_cf[3]),
+        best_cf[4] - learning_rate[1] * derivative_2(best_cf[4])
+    ]
+    best_cf = cf
+    tmp = mse(test)
+    if tmp < err:
+        break
+
+    if i % 100 == 0:
+        print(f"attempt : {i}, err : {tmp}, cf : {cf}")
+
+cf = best_cf
+
+err = mse(test)
+print("final : " + str(err) + ", " + str(best_cf))
+if err <= 5:
+    print("pass the test")
+else:
+    print("fail the test")
 
 ##################

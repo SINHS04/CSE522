@@ -113,7 +113,6 @@ learning_rate = [0.000001, 0.001]
 for i in range(attempt):
     cf = [
         best_cf[0] - learning_rate[0] * derivative_1(),
-        # best_cf[0],
         best_cf[1] - learning_rate[1] * derivative_2(best_cf[1]),
         best_cf[2] - learning_rate[1] * derivative_2(best_cf[2]),
         best_cf[3] - learning_rate[1] * derivative_2(best_cf[3]),
